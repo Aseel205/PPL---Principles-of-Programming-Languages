@@ -1,0 +1,79 @@
+#lang racket/base
+
+; append
+; Signature: append lst1 lst2
+; Type: (Listof Any) (Listof Any) -> (Listof Any)
+; Purpose: Concatenates two lists.
+; Pre-conditions: None
+; Tests:
+; (append '(1 2) '(3 4)) -> '(1 2 3 4)
+; (append '() '(3 4)) -> '(3 4)
+; (append '(1 2) '()) -> '(1 2)
+
+(define append
+  (lambda (l1 l2)
+    (if (null? l1)
+        l2
+        (cons (car l1) (append (cdr l1) l2)))))
+
+
+
+//////////////////////////////////////////////////////////////////
+
+; reverse
+; Signature: reverse lst
+; Type: (Listof Any) -> (Listof Any)
+; Purpose: Reverses the elements of a list.
+; Pre-conditions: None
+; Tests:
+; (reverse '(1 2 3)) -> '(3 2 1)
+; (reverse '(a b c d)) -> '(d c b a)
+; (reverse '()) -> '()
+
+(define reverse
+  (lambda (l)
+    (if (null? l)
+        '()
+        (append (reverse (cdr l)) (list (car l))))))
+
+
+        
+
+
+///////////////////////////////////////// 
+
+  ;;duplicate-items
+  ;; Signature: duplicate-items : (List Any) (List Integer) -> (List Any)
+  ;; Type: (List Any) (List Integer) -> (List Any)
+  ;; Purpose: Duplicates each item in the list `lst` according to the corresponding count in `dup-count`. 
+  ;;          If `dup-count` is shorter than `lst`, it is treated as a cyclic list.
+  ;; Pre-conditions: `dup-count` is not empty and contains only integers.
+  ;; Example usage:
+  ;; (duplicate-items '(1 2 3) '(1 0)) => '(1 3)
+  ;; (duplicate-items '(1 2 3) '(2 1 0 10 2)) => '(1 1 2)
+
+  
+
+(define duplicate-items
+  (lambda (lst dup-count)
+    (define (duplicate-item item count)
+      (if (= count 0)
+          '()
+          (cons item (duplicate-item item (- count 1)))))
+  
+    (define (duplicate-list lst counts)
+      (if (null? lst)
+          '()
+          (let ((item (car lst))
+                (count (car counts))
+                (rest (cdr lst))
+                (rest-counts (if (null? (cdr counts))
+                                 dup-count
+                                 (cdr counts))))
+            (append (duplicate-item item count)
+                    (duplicate-list rest rest-counts)))))
+  
+    (duplicate-list lst dup-count)))
+
+
+///////////////////////////////////////////////////////
